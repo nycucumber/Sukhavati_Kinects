@@ -4,12 +4,6 @@
 void testApp::setup(){
       camPos.set(ofVec3f(ofGetWidth()/2,2900,1400));
     
-    //===================================
-    //task for friday night (mar 21st):
-    //hook Arduino and Oculus Rift
-    //setup camera position and direction and create the "empty room"
-    //===================================
-    
     
     //ofToggleFullscreen();
    
@@ -24,10 +18,9 @@ void testApp::setup(){
 		ofLogNotice() << "zero plane dist: " << kinect.getZeroPlaneDistance() << "mm";
     }
     
-    
 #ifdef USE_TWO_KINECTS
     kinect2.init();
-    Kinect2.open();
+    kinect2.open();
 #endif
     
 //  colorImg.allocate(kinect.width, kinect.height);
@@ -57,9 +50,7 @@ void testApp::setup(){
 void testApp::update(){
     ofBackground(0, 0, 0);
     kinect.update();
-#ifdef USE_TWO_KINECTS
-    kinect2.draw(420, 320, 400, 300);
-#endif
+
     
 //    if(kinect.isFrameNew()){
     
@@ -104,6 +95,7 @@ void testApp::draw(){
         ofDrawBox(0, ofGetHeight()/2, -800, 2400,2400,4800 );
         drawPointCloud();
 #ifdef USE_TWO_KINECTS
+       // ofLog()<<"START DRAW 2ND POINT CLOUD";
         drawAnotherPointCloud();
 #endif
         //camPos.set(ofVec3f(0,900,1600));
@@ -165,9 +157,9 @@ void testApp::drawAnotherPointCloud() {
 	int step = 2;
 	for(int y = 0; y < h; y += step) {
 		for(int x = 0; x < w; x += step) {
-			if(kinect2.getDistanceAt(x, y) > 0 && kinect2.getDistanceAt(x,y) < 1200) {
+			if(kinect2.getDistanceAt(x, y) > 0 && kinect2.getDistanceAt(x,y) < 800) {
 				//mesh.addColor(kinect.getColorAt(x,y));
-				mesh2.addVertex(kinect.getWorldCoordinateAt(x, y));
+				mesh2.addVertex(kinect2.getWorldCoordinateAt(x, y));
                 
 			}
 		}
@@ -179,7 +171,7 @@ void testApp::drawAnotherPointCloud() {
 	ofScale(1, -1, -1);
 	ofTranslate(0, 0, -1000); // center the points a bit
 	ofEnableDepthTest();
-    ofSetColor(200, 200, 200);
+    ofSetColor(255, 100, 00);
 	mesh2.drawVertices();
 	ofDisableDepthTest();
 	ofPopMatrix();
@@ -188,11 +180,11 @@ void testApp::drawAnotherPointCloud() {
 
 
 void testApp::exit(){
-    kinect.setCameraTiltAngle(0);
+   // kinect.setCameraTiltAngle(0);
     kinect.close();
     
 #ifdef USE_TWO_KINECTS
-    kinect2.setCameraTiltAngle(0);
+    //kinect2.setCameraTiltAngle(0);
 	kinect2.close();
 #endif
     
@@ -213,19 +205,23 @@ void testApp::keyPressed(int key){
             if(angle>30)angle=30;
             kinect.setCameraTiltAngle(angle);
             break;
+#ifdef USE_TWO_KINECTS
+
+        case OF_KEY_LEFT:
+            angle--;
+            if(angle<-30)angle=-30;
+            kinect2.setCameraTiltAngle(angle);
+            break;
             
-        case 'w':
-            camPos += ofVec3f(0,0,1);
-            ofLog()<<"camera's position is: "<<cam.getPosition();
-        case 's':
-            camPos -= ofVec3f(0,0,1);
-            ofLog()<<"camera's position is: "<<cam.getPosition();
-        case 'a':
-            camPos -= ofVec3f(0,-1,0);
-            ofLog()<<"camera's position is: "<<cam.getPosition();
-        case 'd':
-            camPos += ofVec3f(0,1,0);
-            ofLog()<<"camera's position is: "<<cam.getPosition();
+        case OF_KEY_RIGHT:
+            angle++;
+            if(angle>30)angle=30;
+            kinect2.setCameraTiltAngle(angle);
+            break;
+            
+            
+#endif
+        
      
     }
 

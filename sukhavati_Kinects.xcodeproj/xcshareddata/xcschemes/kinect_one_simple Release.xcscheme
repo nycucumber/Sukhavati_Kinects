@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "kinect_one_simple.app"
+               BuildableName = "sukhavati_Kinects.app"
                BlueprintName = "sukhavati_Kinects"
                ReferencedContainer = "container:sukhavati_Kinects.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "kinect_one_simple.app"
+            BuildableName = "sukhavati_Kinects.app"
             BlueprintName = "sukhavati_Kinects"
             ReferencedContainer = "container:sukhavati_Kinects.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "kinect_one_simple.app"
+            BuildableName = "sukhavati_Kinects.app"
             BlueprintName = "sukhavati_Kinects"
             ReferencedContainer = "container:sukhavati_Kinects.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "kinect_one_simple.app"
+            BuildableName = "sukhavati_Kinects.app"
             BlueprintName = "sukhavati_Kinects"
             ReferencedContainer = "container:sukhavati_Kinects.xcodeproj">
          </BuildableReference>

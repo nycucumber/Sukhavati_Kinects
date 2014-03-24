@@ -7,7 +7,8 @@
 
 
 
-
+// uncomment this to read from two kinects simultaneously
+#define USE_TWO_KINECTS
 
 
 class testApp : public ofBaseApp{
