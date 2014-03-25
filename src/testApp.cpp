@@ -3,10 +3,13 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
-    k2x = 0;
-    k2y = 0;
-    k2z = -1000;
-      camPos.set(ofVec3f(ofGetWidth()/2,2900,1400));
+    k2x = 48;
+    k2y = -214;
+    k2z = -1550;
+      //camPos.set(ofVec3f(ofGetWidth()/2,2900,1400));
+
+    camPos.set(ofVec3f(1152,1572,0));
+
     
     
     //ofToggleFullscreen();
@@ -163,12 +166,13 @@ void testApp::drawPointCloud() {
 			}
 		}
 	}
-	glPointSize(1);
     
+    
+	glPointSize(1);
 	ofPushMatrix();
 	// the projected points are 'upside down' and 'backwards'
 	ofScale(1, -1, -1);
-	ofTranslate(-100, 0, -400); // center the points a bit
+	ofTranslate(-100, -400, -100); // center the points a bit
 	ofEnableDepthTest();
     ofSetColor(200, 200, 200);
     
@@ -192,7 +196,6 @@ void testApp::drawAnotherPointCloud() {
 			if(kinect2.getDistanceAt(x, y) > 0 && kinect2.getDistanceAt(x,y) < 1200) {
 				//mesh2.addColor(kinect2.getColorAt(x,y));
 				mesh2.addVertex(kinect2.getWorldCoordinateAt(x, y));
-                
 			}
 		}
 	}
@@ -206,9 +209,9 @@ void testApp::drawAnotherPointCloud() {
     
     ofScale(-1, -1, 1);
     
-	ofTranslate(0, 0, -1000); // center the points a bit
+	ofTranslate(k2x , k2y   , k2z); // center the points a bit
 	ofEnableDepthTest();
-    ofSetColor(255);
+    ofSetColor(255,0,0);
    
 	mesh2.drawVertices();
 	ofDisableDepthTest();
@@ -234,6 +237,7 @@ void testApp::exit(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     
+    
     switch (key) {
         case OF_KEY_DOWN:
             angle--;
@@ -252,8 +256,12 @@ void testApp::keyPressed(int key){
             ofLog()<<"flipped";
             break;
             
+           
+            
 #ifdef USE_TWO_KINECTS
 
+            
+     
         case OF_KEY_LEFT:
             angle--;
             if(angle<-30)angle=-30;
@@ -267,17 +275,29 @@ void testApp::keyPressed(int key){
             break;
             
         case 'x':
-            k2x++;
+            k2x = k2x + 50;
+            ofLog()<<k2x<<","<<k2y<<","<<k2z;
+            break;
         case 'X':
-            k2x--;
+            k2x = k2x - 50;
+           ofLog()<<k2x<<","<<k2y<<","<<k2z;
+            break;
         case 'y':
-            k2y++;
+            k2y = k2y + 50;
+            ofLog()<<k2x<<","<<k2y<<","<<k2z;
+            break;
         case 'Y':
-            k2y--;
+            k2y = k2y -50;
+            ofLog()<<k2x<<","<<k2y<<","<<k2z;
+            break;
         case 'z':
-            k2z++;
+            k2z = k2z +50;
+             ofLog()<<k2x<<","<<k2y<<","<<k2z;
+            break;
         case 'Z':
-            k2z--;
+            k2z = k2z -50;
+            ofLog()<<k2x<<","<<k2y<<","<<k2z;
+            break;
             
         
             
@@ -300,6 +320,9 @@ void testApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
+    
+    camPos.set(ofMap(mouseX, 0, ofGetWidth(), -1000, 3000), ofMap(mouseY, 0, ofGetHeight(), -1000, 3000));
+    
 
 }
 
