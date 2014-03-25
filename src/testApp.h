@@ -42,7 +42,7 @@ class testApp : public ofBaseApp{
 	ofxKinect kinect2;
 #endif
     
-    
+    bool flipit;
     
     ofxCvColorImage colorImg;
 
@@ -59,7 +59,9 @@ class testApp : public ofBaseApp{
     int farThreshold;
     
     int angle;
-    
+    float k2x;
+    float k2y;
+    float k2z;
     
 		
 };

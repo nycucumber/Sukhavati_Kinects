@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+    
+    k2x = 0;
+    k2y = 0;
+    k2z = -1000;
       camPos.set(ofVec3f(ofGetWidth()/2,2900,1400));
     
     
@@ -17,6 +21,7 @@ void testApp::setup(){
 		ofLogNotice() << "zero plane pixel size: " << kinect.getZeroPlanePixelSize() << "mm";
 		ofLogNotice() << "zero plane dist: " << kinect.getZeroPlaneDistance() << "mm";
     }
+    flipit = false;
     
 #ifdef USE_TWO_KINECTS
     kinect2.init();
@@ -37,7 +42,7 @@ void testApp::setup(){
 	// zero the tilt on startup
 	angle = 0;
     //kinect device head angle
-	kinect.setCameraTiltAngle(angle);
+	//kinect.setCameraTiltAngle(angle);
 	
 	// start from the front
 	bDrawPointCloud = true;
@@ -50,7 +55,10 @@ void testApp::setup(){
 void testApp::update(){
     ofBackground(0, 0, 0);
     kinect.update();
-
+    
+#ifdef USE_TWO_KINECTS
+    kinect2.update();
+#endif
     
 //    if(kinect.isFrameNew()){
     
@@ -85,18 +93,37 @@ void testApp::draw(){
     
     
     
+    
     ofSetColor(255, 255, 255);
     
     
     if(bDrawPointCloud){
       
         cam.begin();
+        
+      
         ofNoFill();
         ofDrawBox(0, ofGetHeight()/2, -800, 2400,2400,4800 );
         drawPointCloud();
 #ifdef USE_TWO_KINECTS
        // ofLog()<<"START DRAW 2ND POINT CLOUD";
+        ofPushMatrix();
+       
+        ofSetColor(255, 0, 0);
+        ofLine(0, 0, 0, 800, 0,0);
+        ofSetColor(0, 255, 0);
+        ofLine(0, 0, 0, 0,800,0);
+        ofSetColor(0, 0, 255);
+        ofLine(0, 0, 0, 0, 0, 800);
+        ofPopStyle();
+        
+        
+        ofSetColor(255);
+        
         drawAnotherPointCloud();
+        
+        ofPopMatrix();
+        
 #endif
         //camPos.set(ofVec3f(0,900,1600));
       
@@ -136,15 +163,20 @@ void testApp::drawPointCloud() {
 			}
 		}
 	}
-	glPointSize(3);
+	glPointSize(1);
     
 	ofPushMatrix();
 	// the projected points are 'upside down' and 'backwards'
 	ofScale(1, -1, -1);
-	ofTranslate(0, 0, -1000); // center the points a bit
+	ofTranslate(-100, 0, -400); // center the points a bit
 	ofEnableDepthTest();
     ofSetColor(200, 200, 200);
+    
+    if(flipit){
+    
+    }
 	mesh.drawVertices();
+     ofPopStyle();
 	ofDisableDepthTest();
 	ofPopMatrix();
 }
@@ -157,26 +189,35 @@ void testApp::drawAnotherPointCloud() {
 	int step = 2;
 	for(int y = 0; y < h; y += step) {
 		for(int x = 0; x < w; x += step) {
-			if(kinect2.getDistanceAt(x, y) > 0 && kinect2.getDistanceAt(x,y) < 800) {
-				//mesh.addColor(kinect.getColorAt(x,y));
+			if(kinect2.getDistanceAt(x, y) > 0 && kinect2.getDistanceAt(x,y) < 1200) {
+				//mesh2.addColor(kinect2.getColorAt(x,y));
 				mesh2.addVertex(kinect2.getWorldCoordinateAt(x, y));
                 
 			}
 		}
 	}
-	glPointSize(3);
+	glPointSize(1);
     
 	ofPushMatrix();
 	// the projected points are 'upside down' and 'backwards'
-	ofScale(1, -1, -1);
+    
+ 
+    
+    
+    ofScale(-1, -1, 1);
+    
 	ofTranslate(0, 0, -1000); // center the points a bit
 	ofEnableDepthTest();
-    ofSetColor(255, 100, 00);
+    ofSetColor(255);
+   
 	mesh2.drawVertices();
 	ofDisableDepthTest();
+   
 	ofPopMatrix();
 }
 #endif
+
+
 
 
 void testApp::exit(){
@@ -205,6 +246,12 @@ void testApp::keyPressed(int key){
             if(angle>30)angle=30;
             kinect.setCameraTiltAngle(angle);
             break;
+            
+        case 'f':
+            flipit = !flipit;
+            ofLog()<<"flipped";
+            break;
+            
 #ifdef USE_TWO_KINECTS
 
         case OF_KEY_LEFT:
@@ -219,6 +266,20 @@ void testApp::keyPressed(int key){
             kinect2.setCameraTiltAngle(angle);
             break;
             
+        case 'x':
+            k2x++;
+        case 'X':
+            k2x--;
+        case 'y':
+            k2y++;
+        case 'Y':
+            k2y--;
+        case 'z':
+            k2z++;
+        case 'Z':
+            k2z--;
+            
+        
             
 #endif
         
